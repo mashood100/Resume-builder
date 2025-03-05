@@ -11,11 +11,10 @@ import '../services/file_handler.dart';
 import '../services/pdf_generator.dart';
 import '../services/project_info.dart';
 import '../services/redirect_handler.dart';
-import '../widgets/about_dialog.dart';
-import '../widgets/confirmation_dialog.dart';
-import '../widgets/download_dialog.dart';
-import '../widgets/portrait_drawer.dart';
-import 'input_form.dart';
+import '../core/share-widgets/confirmation_dialog.dart';
+import '../core/share-widgets/download_dialog.dart';
+import 'input_form/widgets/portrait_drawer.dart';
+import 'input_form/input_form.dart';
 import 'pdf_viewer.dart';
 import '../services/theme_provider.dart';
 
@@ -130,13 +129,7 @@ class SplitScreenState extends State<SplitScreen>
                 onLayout: (PdfPageFormat format) =>
                     pdfGenerator.generateResumeAsPDF());
           case 4:
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CustomAboutDialog(
-                    projectInfoHandler: projectInfoHandler,
-                  );
-                });
+            
           case 5:
             RedirectHandler.openUrl(Strings.sourceCodeUrl);
           case 6:

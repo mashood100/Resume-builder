@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../common/strings.dart';
+import '../../common/strings.dart';
 
 /// A dialog that allows the user to download the resume as a PDF or JSON file.
 class DownloadDialog extends StatelessWidget {

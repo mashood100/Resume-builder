@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../common/strings.dart';
-import '../models/education.dart';
+import '../../../../common/strings.dart';
+import '../../../../models/education.dart';
 import 'date_range_entry.dart';
 import 'edit_entry_menu.dart';
-import 'frosted_container.dart';
-import 'generic_text_field.dart';
+import '../../../../core/share-widgets/frosted_container.dart';
+import '../../../../core/share-widgets/text_field/generic_text_field.dart';
 
 /// A form field for an education entry.
 class EducationEntry extends StatefulWidget {

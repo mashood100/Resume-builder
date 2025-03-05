@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../common/strings.dart';
-import 'confirmation_dialog.dart';
+import '../../../../common/strings.dart';
+import '../../../../core/share-widgets/confirmation_dialog.dart';
 
 /// A menu for removing or hiding an entry.
 class EditEntryMenu extends StatelessWidget {

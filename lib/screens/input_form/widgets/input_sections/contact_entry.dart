@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../common/strings.dart';
-import '../models/contact.dart';
-import 'frosted_container.dart';
-import 'generic_text_field.dart';
-import 'icon_picker.dart';
+import '../../../../common/strings.dart';
+import '../../../../models/contact.dart';
+import '../../../../core/share-widgets/frosted_container.dart';
+import '../../../../core/share-widgets/text_field/generic_text_field.dart';
+import '../../../../core/share-widgets/icon_picker.dart';
 
 /// A form field for a contact entry.
 class ContactEntry extends StatelessWidget {

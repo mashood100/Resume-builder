@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../common/strings.dart';
+import '../../common/strings.dart';
 
 /// A confirmation dialog that prompts the user to confirm an action.
 class ConfirmationDialog extends StatelessWidget {
