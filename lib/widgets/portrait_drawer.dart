@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '../common/strings.dart';
 import '../services/pdf_generator.dart';
 import '../services/project_info.dart';
@@ -46,24 +44,7 @@ class PortraitDrawer extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 4),
-                TextButton(
-                  onPressed: () async {
-                    if (await canLaunchUrl(Uri.parse(Strings.flutterUrl))) {
-                      launchUrl(
-                        Uri.parse(Strings.flutterUrl),
-                      );
-                    }
-                  },
-                  child: Text(
-                    Strings.poweredByFlutter.toUpperCase(),
-                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withOpacity(0.5),
-                        ),
-                  ),
-                ),
+              
               ],
             ),
           ),

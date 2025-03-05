@@ -122,6 +122,12 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "flutter_colorpicker",
+      "rootUri": "file:///Users/mashoodhussain/.pub-cache/hosted/pub.dev/flutter_colorpicker-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
       "name": "flutter_form_builder",
       "rootUri": "file:///Users/mashoodhussain/.pub-cache/hosted/pub.dev/flutter_form_builder-9.1.1",
       "packageUri": "lib/",
@@ -530,7 +536,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2025-03-05T01:03:13.550304Z",
+  "generated": "2025-03-05T01:32:59.113472Z",
   "generator": "pub",
   "generatorVersion": "3.6.0",
   "flutterRoot": "file:///Users/mashoodhussain/FlutterDev/flutter",

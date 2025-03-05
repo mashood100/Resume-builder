@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'common/strings.dart';
-import 'common/styles/theme/dark_green_theme.dart';
-import 'common/styles/theme/light_green_theme.dart';
+import 'core/styles/theme/dark_green_theme.dart';
+import 'core/styles/theme/light_green_theme.dart';
 import 'screens/split_screen.dart';
 
 void main() {

@@ -22,9 +22,7 @@ class Strings {
       'The Flutter Resume Builder, crafted by Pablo L. Guerra, is an '
       'open-source initiative aimed at offering users\na user-friendly, '
       'web-based resume builder that is both free and capable of producing polished resumes.';
-  static const String aboutThisProject = 'About this Project';
   static const String moreOptions = 'More Options';
-  static const String contributeCode = 'Contribute Code';
   static const String donate = 'Donate';
   static const String licenses = 'Licenses';
   static const String moreProjects = 'More Projects';
@@ -95,4 +93,7 @@ class Strings {
   static const String remove = 'Remove';
   static const String hideEntry = 'Hide Entry';
   static const String showEntry = 'Show Entry';
+
+  // New string constant
+  static const String theme = 'Theme';
 }

@@ -22,6 +22,7 @@ class Resume extends ChangeNotifier {
     List<String>? sectionOrder,
     List<String>? hiddenSections,
     this.logoAsBytes,
+    this.themeColor,
   }) {
     this.creationDate = creationDate ?? DateTime.now();
     this.lastModified = lastModified ?? DateTime.now();
@@ -81,6 +82,8 @@ class Resume extends ChangeNotifier {
           ? Uint8List.fromList(
               (map['logoAsBytes'] as List<dynamic>).cast<int>())
           : null,
+      themeColor:
+          map['themeColor'] != null ? Color(map['themeColor'] as int) : null,
     );
   }
 
@@ -136,6 +139,9 @@ class Resume extends ChangeNotifier {
 
   /// The list of hidden sections.
   List<String> _hiddenSections = <String>[];
+
+  /// The theme color for the resume
+  Color? themeColor;
 
   /// Whether the section is visible.
   bool sectionVisible(String sectionTitle) {
@@ -352,6 +358,13 @@ class Resume extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Sets the theme color for the resume and triggers a UI rebuild
+  void setThemeColor(Color color) {
+    themeColor = color;
+    lastModified = DateTime.now();
+    notifyListeners();
+  }
+
   /// Return a map of the resume.
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> map = <String, dynamic>{
@@ -375,7 +388,8 @@ class Resume extends ChangeNotifier {
           .toList(),
       'sectionOrder': sectionOrder,
       'hiddenSections': _hiddenSections,
-      'logoAsBytes': logoAsBytes
+      'logoAsBytes': logoAsBytes,
+      'themeColor': themeColor?.value,
     };
     return map;
   }

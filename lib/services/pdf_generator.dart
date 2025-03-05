@@ -19,6 +19,25 @@ class PDFGenerator {
   /// The resume to be generated as PDF.
   Resume resume;
 
+  /// Converts Flutter Color to PDF Color
+  PdfColor _flutterColorToPdfColor(cupertino.Color color) {
+    return PdfColor(
+      color.red / 255,
+      color.green / 255,
+      color.blue / 255,
+      color.alpha / 255,
+    );
+  }
+
+  /// Gets the theme color or defaults to a blue shade
+  PdfColor get themeColor {
+    if (resume.themeColor != null) {
+      return _flutterColorToPdfColor(resume.themeColor!);
+    }
+    // Default theme color
+    return PdfColor(0.2, 0.4, 0.6);
+  }
+
   /// A label for a section.
   Widget _sectionLabel(String text) {
     return Padding(
@@ -30,14 +49,14 @@ class PDFGenerator {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: PdfColor(0.2, 0.4, 0.6),
+              color: themeColor,
             ),
           ),
           Expanded(
             child: Divider(
               indent: 8,
               thickness: 1,
-              color: PdfColor(0.2, 0.4, 0.6),
+              color: themeColor,
             ),
           ),
         ],
@@ -58,7 +77,7 @@ class PDFGenerator {
             SizedBox(height: 4),
             _location(),
             SizedBox(height: 12),
-            Divider(thickness: 0.5, color: PdfColor(0.7, 0.7, 0.7)),
+            Divider(thickness: 0.5, color: themeColor),
             SizedBox(height: 8),
             _contactGrid(),
             SizedBox(height: 10),
@@ -67,12 +86,20 @@ class PDFGenerator {
         if (resume.logoAsBytes != null)
           Align(
             alignment: Alignment.topRight,
-            child: Image(
-              MemoryImage(
-                resume.logoAsBytes!,
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: PdfColor(0.95, 0.95, 0.95),
+                border: Border.all(color: themeColor, width: 2),
               ),
-              width: 75,
-              height: 75,
+              child: ClipOval(
+                child: Image(
+                  MemoryImage(resume.logoAsBytes!),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
           ),
       ],
@@ -98,7 +125,7 @@ class PDFGenerator {
                 Icon(
                   IconData(resume.contactList[iterator].iconData.codePoint),
                   size: 14,
-                  color: const PdfColor(0.3, 0.5, 0.7),
+                  color: themeColor,
                 )
               else
                 Container(width: 1),
@@ -115,7 +142,7 @@ class PDFGenerator {
                 Icon(
                   IconData(resume.contactList[iterator + 1].iconData.codePoint),
                   size: 14,
-                  color: const PdfColor(0.3, 0.5, 0.7),
+                  color: themeColor,
                 )
               else
                 Container(),
@@ -141,7 +168,7 @@ class PDFGenerator {
       style: TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.bold,
-        color: PdfColor(0.2, 0.4, 0.6),
+        color: themeColor,
       ),
     );
   }
@@ -153,7 +180,7 @@ class PDFGenerator {
         Icon(
           IconData(cupertino.CupertinoIcons.map_pin_ellipse.codePoint),
           size: 14,
-          color: const PdfColor(0.5, 0.5, 0.5),
+          color: themeColor,
         ),
         SizedBox(width: 4),
         Text(
@@ -273,7 +300,7 @@ class PDFGenerator {
             margin: const EdgeInsets.only(bottom: 8),
             decoration: BoxDecoration(
               border: Border(
-                left: BorderSide(color: PdfColor(0.85, 0.85, 0.85), width: 2),
+                left: BorderSide(color: themeColor, width: 2),
               ),
             ),
             padding: const EdgeInsets.only(left: 8),
@@ -288,7 +315,7 @@ class PDFGenerator {
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
-                        color: PdfColor(0.2, 0.4, 0.6),
+                        color: themeColor,
                       ),
                     ),
                     Text(
@@ -362,7 +389,7 @@ class PDFGenerator {
       margin: const EdgeInsets.only(bottom: 6),
       decoration: BoxDecoration(
         border: Border(
-          left: BorderSide(color: PdfColor(0.85, 0.85, 0.85), width: 2),
+          left: BorderSide(color: themeColor, width: 2),
         ),
       ),
       padding: const EdgeInsets.only(left: 8, bottom: 4),
@@ -375,7 +402,7 @@ class PDFGenerator {
                 education.degreeController.text,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: PdfColor(0.2, 0.4, 0.6),
+                  color: themeColor,
                   fontSize: 13,
                 ),
               ),
@@ -469,13 +496,6 @@ class PDFGenerator {
           alignment: Alignment.bottomCenter,
           child: Text(
             '${resume.nameController.text} - Page $currentPage / $totalPages',
-            style: const TextStyle(color: PdfColor(0.6, 0.6, 0.6), fontSize: 8),
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Text(
-            'Generated: ${DateFormat('MM/yyyy').format(DateTime.now())}',
             style: const TextStyle(color: PdfColor(0.6, 0.6, 0.6), fontSize: 8),
           ),
         ),

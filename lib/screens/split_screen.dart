@@ -177,24 +177,8 @@ class SplitScreenState extends State<SplitScreen>
             firstWordOnly(Strings.printPDF),
           ),
         ),
-        NavigationRailDestination(
-          icon: const Tooltip(
-            message: Strings.aboutThisProject,
-            child: Icon(Icons.info),
-          ),
-          label: Text(
-            firstWordOnly(Strings.aboutThisProject),
-          ),
-        ),
-        NavigationRailDestination(
-          icon: const Tooltip(
-            message: Strings.contributeCode,
-            child: Icon(Icons.code),
-          ),
-          label: Text(
-            firstWordOnly(Strings.contributeCode),
-          ),
-        ),
+        
+      
       ],
     );
   }
@@ -311,30 +295,7 @@ class SplitScreenState extends State<SplitScreen>
                   pdfGenerator.generateResumeAsPDF());
         },
       ),
-      _listOption(
-        context: context,
-        title: Strings.aboutThisProject.toUpperCase(),
-        iconData: Icons.info,
-        onTap: () {
-          Navigator.pop(context);
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return CustomAboutDialog(
-                  projectInfoHandler: projectInfoHandler,
-                );
-              });
-        },
-      ),
-      _listOption(
-        context: context,
-        title: Strings.contributeCode.toUpperCase(),
-        iconData: Icons.code,
-        onTap: () {
-          Navigator.pop(context);
-          RedirectHandler.openUrl(Strings.sourceCodeUrl);
-        },
-      ),
+      
     ];
   }
 
@@ -371,22 +332,7 @@ class SplitScreenState extends State<SplitScreen>
                 title: Row(
                   children: <Widget>[
                     const Text(Strings.resumeBuilder),
-                    if (orientation == Orientation.landscape)
-                      TextButton(
-                        onPressed: () =>
-                            RedirectHandler.openUrl(Strings.flutterUrl),
-                        child: Text(
-                          Strings.poweredByFlutter.toUpperCase(),
-                          style:
-                              Theme.of(context).textTheme.labelSmall!.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface
-                                        .withOpacity(0.5),
-                                  ),
-                        ),
-                      ),
-                    const Spacer(),
+                    if (orientation == Orientation.landscape) const Spacer(),
                     if (orientation == Orientation.portrait)
                       IconButton(
                         icon: const Icon(Icons.restart_alt),

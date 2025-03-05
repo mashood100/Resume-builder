@@ -7,6 +7,7 @@ import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
 import 'package:flutter_reorderable_grid_view/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 import '../common/strings.dart';
 import '../models/generic.dart';
@@ -71,20 +72,46 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
         // Right side: Logo picker widget.
         Padding(
           padding: const EdgeInsets.all(4.0),
-          child: ImageFilePicker(
-            logoFileBytes: resume.logoAsBytes,
-            onPressed: () async {
-              // Opens file picker to select an image file for the logo.
-              final FilePickerResult? result =
-                  await FilePicker.platform.pickFiles(
-                type: FileType.custom,
-                allowedExtensions: <String>['jpg', 'png', 'jpeg'],
-              );
-              if (result != null) {
-                resume.logoAsBytes = result.files.first.bytes;
-                resume.rebuild();
-              }
-            },
+          child: Column(
+            children: [
+              ImageFilePicker(
+                logoFileBytes: resume.logoAsBytes,
+                onPressed: () async {
+                  // Opens file picker to select an image file for the logo.
+                  final FilePickerResult? result =
+                      await FilePicker.platform.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: <String>['jpg', 'png', 'jpeg'],
+                  );
+                  if (result != null) {
+                    resume.logoAsBytes = result.files.first.bytes;
+                    resume.rebuild();
+                  }
+                },
+              ),
+              // Add a remove button when an image is selected
+              if (resume.logoAsBytes != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TextButton.icon(
+                    onPressed: () {
+                      resume.logoAsBytes = null;
+                      resume.rebuild();
+                    },
+                    icon: const Icon(Icons.delete_outline, size: 16),
+                    label: const Text(
+                      'Remove Image',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                  ),
+                ),
+            ],
           ),
         ),
       ],
@@ -493,9 +520,134 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
     );
   }
 
+  /// Add this method for theme color selection
+  Widget _themeColorSection(Resume resume) {
+    // Define 5 preset theme colors
+    final List<Color> presetColors = [
+      const Color(0xFF2C698D), // Blue
+      const Color(0xFF2E8B57), // Sea Green
+      const Color(0xFF8B0000), // Dark Red
+      const Color(0xFF4B0082), // Indigo
+      const Color(0xFF556B2F), // Olive Green
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _sectionTitle(
+          title: Strings.theme,
+          resume: resume,
+          allowVisibilityToggle: false,
+          reOrderable: false,
+          onAddPressed: null,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Select a theme color for your resume:',
+                style: TextStyle(fontSize: 14),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  // Preset color options
+                  for (final Color color in presetColors)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: InkWell(
+                        onTap: () {
+                          resume.setThemeColor(color);
+                        },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: color,
+                            border: Border.all(
+                              color: resume.themeColor == color
+                                  ? Colors.white
+                                  : Colors.grey.shade300,
+                              width: resume.themeColor == color ? 3 : 1,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                  // Custom color picker button
+                  InkWell(
+                    onTap: () async {
+                      final Color? pickedColor = await showDialog<Color>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Pick a color'),
+                            content: SingleChildScrollView(
+                              child: ColorPicker(
+                                pickerColor:
+                                    resume.themeColor ?? presetColors[0],
+                                onColorChanged: (Color color) {
+                                  resume.setThemeColor(color);
+                                },
+                                enableAlpha: false,
+                                labelTypes: const [],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      if (pickedColor != null) {
+                        resume.setThemeColor(pickedColor);
+                      }
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Colors.red, Colors.green, Colors.blue],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.colorize,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   /// Orders and returns the list of sections in the order specified by the resume model.
   List<Widget> _orderedSections(Resume resume) {
     final List<Widget> sections = <Widget>[];
+
+    // Add theme color section at the top
+    sections.add(_themeColorSection(resume));
+
     // Loop over the section order list and add the corresponding section widget.
     for (final String sectionTitle in resume.sectionOrder) {
       switch (sectionTitle) {
