@@ -35,7 +35,7 @@ class PDFViewerState extends State<PDFViewer> {
       future: pdfGenerator.generateResumeAsPDF(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return Container(
+          return ColoredBox(
             color: Theme.of(context).scaffoldBackgroundColor,
             child: const Center(
               child: FlutterSpinner(),
@@ -44,8 +44,8 @@ class PDFViewerState extends State<PDFViewer> {
         }
 
         // Use the current theme mode to determine PDF viewer brightness
-        final themeProvider = Provider.of<ThemeProvider>(context);
-        final brightness =
+        final ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
+        final Brightness brightness =
             themeProvider.isDarkMode ? Brightness.dark : Brightness.light;
 
         return Theme(
