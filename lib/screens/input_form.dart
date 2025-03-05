@@ -31,6 +31,7 @@ class ResumeInputForm extends StatefulWidget {
   /// Whether the layout is portrait or not.
   final bool portrait;
 
+  /// Controller for scrolling the form.
   final ScrollController scrollController;
 
   @override
@@ -38,11 +39,12 @@ class ResumeInputForm extends StatefulWidget {
 }
 
 class _ResumeInputFormState extends State<ResumeInputForm> {
-  /// Form fields for requesting the user's name, location, and a logo.
+  /// Builds the header section containing name, location, and logo picker.
   Widget _header(Resume resume) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        // Left side: Name and location text fields.
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(4.0),
@@ -66,11 +68,13 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
           ),
         ),
         const SizedBox(width: 4),
+        // Right side: Logo picker widget.
         Padding(
           padding: const EdgeInsets.all(4.0),
           child: ImageFilePicker(
             logoFileBytes: resume.logoAsBytes,
             onPressed: () async {
+              // Opens file picker to select an image file for the logo.
               final FilePickerResult? result =
                   await FilePicker.platform.pickFiles(
                 type: FileType.custom,
@@ -87,8 +91,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
     );
   }
 
-  /// A section title with buttons for adding, removing, hiding, and reordering
-  /// the section.
+  /// Builds a section title row with optional editing, deletion, visibility toggling, and reordering buttons.
   Widget _sectionTitle({
     required String title,
     required Resume resume,
@@ -101,6 +104,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Row(
         children: <Widget>[
+          // If the title is editable, show a text field for renaming.
           if (titleEditable)
             Expanded(
               flex: 2,
@@ -114,6 +118,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
                 },
               ),
             ),
+          // Otherwise, display the section title.
           if (!titleEditable)
             Text(
               title,
@@ -122,6 +127,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+          // Divider between title and buttons.
           const Expanded(
             child: Divider(
               indent: 10,
@@ -129,6 +135,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
               color: Colors.white,
             ),
           ),
+          // Remove section button if allowed.
           if (resume.removeAllowed(title))
             IconButton(
               onPressed: () {
@@ -150,6 +157,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
               iconSize: 18,
               icon: const Icon(Icons.delete_outline),
             ),
+          // Toggle section visibility if allowed.
           if (allowVisibilityToggle)
             IconButton(
               onPressed: () => resume.toggleSectionVisibility(title),
@@ -165,6 +173,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
                     : Icons.visibility_off,
               ),
             ),
+          // Add new entry button.
           if (onAddPressed != null)
             IconButton(
               onPressed: onAddPressed,
@@ -174,6 +183,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
               iconSize: 18,
               icon: const Icon(Icons.add),
             ),
+          // Move section up button if reordering is enabled.
           if (reOrderable)
             IconButton(
               onPressed: resume.moveUpAllowed(title)
@@ -185,6 +195,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
               iconSize: 18,
               icon: const Icon(Icons.expand_less_outlined),
             ),
+          // Move section down button if reordering is enabled.
           if (reOrderable)
             IconButton(
               onPressed: resume.moveDownAllowed(title)
@@ -201,11 +212,12 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
     );
   }
 
-  /// A grid of contact fields.
+  /// Builds the contact information section as a reorderable grid.
   Widget _contactSection(Resume resume) {
     return ReorderableBuilder(
         longPressDelay: const Duration(milliseconds: 250),
         enableScrollingWhileDragging: false,
+        // Styling for the widget being dragged.
         dragChildBoxDecoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           boxShadow: const <BoxShadow>[
@@ -231,6 +243,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
             ),
           );
         },
+        // Generate the list of contact entry widgets.
         children: List<Widget>.generate(
           resume.contactList.length,
           (int index) => ContactEntry(
@@ -240,6 +253,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
               resume.rebuild();
             },
             onIconButtonPressed: () async {
+              // Opens an icon picker when the icon button is pressed.
               final IconData? iconData = await FlutterIconPicker.showIconPicker(
                   context,
                   iconPackModes: <IconPack>[IconPack.cupertino]);
@@ -250,6 +264,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
             },
           ),
         ),
+        // Handle the reordering callback.
         onReorder: (List<OrderUpdateEntity> orderUpdateEntities) {
           for (final OrderUpdateEntity element in orderUpdateEntities) {
             resume.onReorderContactInfoList(element.oldIndex, element.newIndex);
@@ -257,21 +272,24 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
         });
   }
 
-  /// A grid of skill fields.
+  /// Builds the skills section containing a title and a reorderable grid of skill text fields.
   Widget _skillsSection(Resume resume) {
     return Column(
       children: <Widget>[
+        // Section title with add button and visibility toggle.
         _sectionTitle(
           title: Strings.skills,
           resume: resume,
           allowVisibilityToggle: true,
           onAddPressed: resume.addSkill,
         ),
+        // The skills list is displayed with reduced opacity if the section is hidden.
         Opacity(
           opacity: resume.sectionVisible(Strings.skills) ? 1 : 0.5,
           child: ReorderableBuilder(
             longPressDelay: const Duration(milliseconds: 250),
             enableScrollingWhileDragging: false,
+            // Styling for the widget being dragged.
             dragChildBoxDecoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               boxShadow: const <BoxShadow>[
@@ -283,6 +301,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
               ],
             ),
             onReorder: (List<OrderUpdateEntity> orderUpdateEntities) {
+              // Update the order of skills.
               for (final OrderUpdateEntity element in orderUpdateEntities) {
                 resume.onReorderSkillsList(element.oldIndex, element.newIndex);
               }
@@ -300,6 +319,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
                 ),
               );
             },
+            // Generate each skill text field inside a frosted container.
             children: List<Widget>.generate(
               resume.skillTextControllers.length,
               (int index) => FrostedContainer(
@@ -324,15 +344,17 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
     );
   }
 
-  /// A list of experience fields.
+  /// Builds the experience section as a reorderable list of experience entries.
   Widget _experienceSection(Resume resume) {
     return Column(
       children: <Widget>[
+        // Section title with add button.
         _sectionTitle(
           title: Strings.experience,
           resume: resume,
           onAddPressed: resume.addExperience,
         ),
+        // Reorderable list for experience entries.
         ReorderableList(
           itemCount: resume.experiences.length,
           physics: const NeverScrollableScrollPhysics(),
@@ -359,15 +381,17 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
     );
   }
 
-  /// A list of education fields.
+  /// Builds the education section as a reorderable list of education entries.
   Widget _educationSection(Resume resume) {
     return Column(
       children: <Widget>[
+        // Section title with add button.
         _sectionTitle(
           title: Strings.education,
           resume: resume,
           onAddPressed: resume.addEducation,
         ),
+        // Reorderable list for education entries.
         ReorderableList(
           itemCount: resume.educationHistory.length,
           shrinkWrap: true,
@@ -394,8 +418,9 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
     );
   }
 
-  /// A list of custom fields.
+  /// Builds a custom section based on a given title.
   Widget _customSection({required String title, required Resume resume}) {
+    // Extract the list of custom entries for the given section title.
     final List<GenericEntry> genericSection = <GenericEntry>[];
     for (final Map<String, GenericEntry> section in resume.customSections) {
       if (section.containsKey(title)) {
@@ -405,6 +430,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
 
     return Column(
       children: <Widget>[
+        // Section title with editable title, add button, and visibility toggle.
         _sectionTitle(
           title: title,
           resume: resume,
@@ -412,6 +438,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
           allowVisibilityToggle: true,
           onAddPressed: () => resume.addCustomSectionEntry(title),
         ),
+        // Custom section entries displayed with reduced opacity if hidden.
         Opacity(
           opacity: resume.sectionVisible(title) ? 1 : 0.5,
           child: ReorderableList(
@@ -442,7 +469,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
     );
   }
 
-  /// Adds a shadow to the widget being reordered in a list.
+  /// A decorator widget that adds a shadow and slight rotation to a widget being reordered.
   Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
     return AnimatedBuilder(
       animation: animation,
@@ -466,9 +493,10 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
     );
   }
 
-  /// Returns a list of sections in the order they should be displayed.
+  /// Orders and returns the list of sections in the order specified by the resume model.
   List<Widget> _orderedSections(Resume resume) {
     final List<Widget> sections = <Widget>[];
+    // Loop over the section order list and add the corresponding section widget.
     for (final String sectionTitle in resume.sectionOrder) {
       switch (sectionTitle) {
         case Strings.skills:
@@ -478,6 +506,7 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
         case Strings.education:
           sections.add(_educationSection(resume));
         default:
+          // Custom section if title does not match the predefined ones.
           sections.add(_customSection(title: sectionTitle, resume: resume));
       }
     }
@@ -500,11 +529,15 @@ class _ResumeInputFormState extends State<ResumeInputForm> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
+                    // Header with name, location and logo picker.
                     _header(resume),
                     const SizedBox(height: 10),
+                    // Contact information section.
                     _contactSection(resume),
+                    // Spread the ordered sections (skills, experience, education, custom).
                     ..._orderedSections(resume),
                     const SizedBox(height: 10),
+                    // Button to add a new custom section.
                     OutlinedButton(
                       onPressed: resume.addCustomSection,
                       child: Text(
