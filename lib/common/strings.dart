@@ -96,4 +96,8 @@ class Strings {
 
   // New string constant
   static const String theme = 'Theme';
+
+  // Add these somewhere in your Strings class
+  static const String switchToLightMode = 'Switch to Light Mode';
+  static const String switchToDarkMode = 'Switch to Dark Mode';
 }

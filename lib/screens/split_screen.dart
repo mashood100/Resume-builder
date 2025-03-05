@@ -17,6 +17,7 @@ import '../widgets/download_dialog.dart';
 import '../widgets/portrait_drawer.dart';
 import 'input_form.dart';
 import 'pdf_viewer.dart';
+import '../services/theme_provider.dart';
 
 /// Split view of the resume builder (input form and PDF viewer).
 class SplitScreen extends StatefulWidget {
@@ -177,8 +178,6 @@ class SplitScreenState extends State<SplitScreen>
             firstWordOnly(Strings.printPDF),
           ),
         ),
-        
-      
       ],
     );
   }
@@ -295,8 +294,26 @@ class SplitScreenState extends State<SplitScreen>
                   pdfGenerator.generateResumeAsPDF());
         },
       ),
-      
     ];
+  }
+
+  /// Add this method to create a theme toggle button
+  Widget _themeToggleButton() {
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, _) {
+        return IconButton(
+          icon: Icon(
+            themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+          ),
+          tooltip: themeProvider.isDarkMode
+              ? Strings.switchToLightMode
+              : Strings.switchToDarkMode,
+          onPressed: () {
+            themeProvider.toggleTheme();
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -408,8 +425,14 @@ class SplitScreenState extends State<SplitScreen>
                           );
                         },
                       ),
+                    if (orientation == Orientation.portrait)
+                      _themeToggleButton(),
                   ],
                 ),
+                actions: [
+                  if (orientation == Orientation.landscape)
+                    _themeToggleButton(),
+                ],
                 centerTitle: false,
               ),
               body: Consumer<Resume>(
