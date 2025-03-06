@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
-import '../../../common/strings.dart';
-import '../../../models/resume.dart';
+import '../../../../common/strings.dart';
+import '../../../../data/models/resume.dart';
 import 'section_title.dart';
 
 /// A widget that displays the theme color selection section.

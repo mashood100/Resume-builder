@@ -6,7 +6,7 @@ import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
 
 import '../common/strings.dart';
-import '../models/resume.dart';
+import '../data/models/resume.dart';
 import 'widgets/pdf_widgets.dart';
 
 /// Generates a PDF from a [Resume].

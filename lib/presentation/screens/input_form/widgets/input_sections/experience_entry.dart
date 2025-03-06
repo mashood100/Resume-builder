@@ -1,39 +1,38 @@
 import 'package:flutter/material.dart';
 
-import '../../../../common/strings.dart';
-import '../../../../models/education.dart';
+import '../../../../../common/strings.dart';
+import '../../../../../data/models/experience.dart';
 import 'date_range_entry.dart';
 import 'edit_entry_menu.dart';
-import '../../../../core/share-widgets/frosted_container.dart';
-import '../../../../core/share-widgets/text_field/generic_text_field.dart';
+import '../../../../../core/share-widgets/frosted_container.dart';
+import '../../../../../core/share-widgets/text_field/generic_text_field.dart';
 
-/// A form field for an education entry.
-class EducationEntry extends StatefulWidget {
-  const EducationEntry({
+/// A form field for an experience entry.
+class ExperienceEntry extends StatefulWidget {
+  const ExperienceEntry({
     super.key,
-    required this.education,
+    required this.experience,
     required this.rebuild,
-    required this.portrait,
     required this.onRemove,
+    required this.portrait,
   });
+
+  /// The experience to use.
+  final Experience experience;
 
   /// The callback when the user submits the text field or edits the visibility.
   final Function()? rebuild;
 
-  /// The education to use.
-  final Education education;
+  final Function()? onRemove;
 
   /// Whether the layout is portrait or not.
   final bool portrait;
 
-  /// The callback when the user removes the entry.
-  final Function()? onRemove;
-
   @override
-  State<StatefulWidget> createState() => EducationEntryState();
+  State<StatefulWidget> createState() => ExperienceEntryState();
 }
 
-class EducationEntryState extends State<EducationEntry> {
+class ExperienceEntryState extends State<ExperienceEntry> {
   /// Returns the layout based on the orientation.
   Widget _responsiveLayout({required List<Widget> children}) {
     if (widget.portrait) {
@@ -48,8 +47,9 @@ class EducationEntryState extends State<EducationEntry> {
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: widget.education.visible ? 1 : 0.75,
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 300),
+      opacity: widget.experience.visible ? 1 : 0.75,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 16),
         child: FrostedContainer(
@@ -57,31 +57,32 @@ class EducationEntryState extends State<EducationEntry> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               EditEntryMenu(
+                visible: widget.experience.visible,
                 onRemove: widget.onRemove,
                 onToggleVisibility: () {
-                  widget.education.toggleVisibility();
+                  widget.experience.toggleVisibility();
                   widget.rebuild?.call();
                 },
-                visible: widget.education.visible,
               ),
               const SizedBox(height: 4),
               _responsiveLayout(
                 children: <Widget>[
                   Flexible(
                     child: GenericTextField(
-                      label: Strings.institution,
-                      controller: widget.education.institutionController,
+                      label: Strings.position,
                       onSubmitted: (_) => widget.rebuild,
-                      enabled: widget.education.visible,
+                      controller: widget.experience.positionController,
+                      enabled: widget.experience.visible,
                     ),
                   ),
                   const SizedBox(width: 10, height: 10),
                   Flexible(
                     child: DateRangeEntry(
-                      startDateController: widget.education.startDateController,
-                      endDateController: widget.education.endDateController,
+                      startDateController:
+                          widget.experience.startDateController,
+                      endDateController: widget.experience.endDateController,
                       onSubmitted: (_) => widget.rebuild,
-                      enableEditing: widget.education.visible,
+                      enableEditing: widget.experience.visible,
                     ),
                   ),
                 ],
@@ -90,23 +91,34 @@ class EducationEntryState extends State<EducationEntry> {
               _responsiveLayout(
                 children: <Widget>[
                   Flexible(
+                    flex: 2,
                     child: GenericTextField(
-                      label: Strings.degree,
-                      controller: widget.education.degreeController,
+                      label: Strings.company,
                       onSubmitted: (_) => widget.rebuild,
-                      enabled: widget.education.visible,
+                      controller: widget.experience.companyController,
+                      enabled: widget.experience.visible,
                     ),
                   ),
                   const SizedBox(width: 10, height: 10),
                   Flexible(
                     child: GenericTextField(
                       label: Strings.location,
-                      controller: widget.education.locationController,
                       onSubmitted: (_) => widget.rebuild,
-                      enabled: widget.education.visible,
+                      controller: widget.experience.locationController,
+                      enabled: widget.experience.visible,
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(height: 10),
+              GenericTextField(
+                label: Strings.jobDescription,
+                controller: widget.experience.descriptionController,
+                multiLine: true,
+                onSubmitted: (_) => widget.rebuild,
+                enabled: widget.experience.visible,
+                showImproveWithAI: true,
+                fieldContext: 'job description',
               ),
             ],
           ),

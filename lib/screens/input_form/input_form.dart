@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
-import '../../common/strings.dart';
-import '../../models/resume.dart';
-import 'widgets/input_sections/contact_section.dart';
-import 'widgets/ordered_sections.dart';
-import 'widgets/resume_header.dart';
+import '../../../common/strings.dart';
+import '../../data/models/resume.dart';
+import '../../presentation/screens/input_form/widgets/input_sections/contact_section.dart';
+import '../../presentation/screens/input_form/widgets/ordered_sections.dart';
+import '../../presentation/screens/input_form/widgets/resume_header.dart';
+
 
 /// The input form for the resume.
 class ResumeInputForm extends StatefulWidget {

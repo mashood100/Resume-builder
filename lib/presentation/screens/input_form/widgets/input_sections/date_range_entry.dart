@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../common/strings.dart';
-import '../../../../core/share-widgets/text_field/generic_text_field.dart';
+import '../../../../../common/strings.dart';
+import '../../../../../core/share-widgets/text_field/generic_text_field.dart';
 
 /// A form field for a date range.
 class DateRangeEntry extends StatelessWidget {

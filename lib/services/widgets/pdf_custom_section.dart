@@ -1,8 +1,8 @@
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 
-import '../../models/generic.dart';
-import '../../models/resume.dart';
+import '../../data/models/generic.dart';
+import '../../data/models/resume.dart';
 import 'pdf_base_widget.dart';
 import 'pdf_section_label.dart';
 

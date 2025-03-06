@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:provider/provider.dart';
 
-import '../services/pdf_generator.dart';
-import '../core/share-widgets/flutter_spinner.dart';
-import '../services/theme_provider.dart';
+import '../../services/pdf_generator.dart';
+import '../../core/share-widgets/flutter_spinner.dart';
+import '../../services/theme_provider.dart';
 
 /// Displays the generated PDF.
 class PDFViewer extends StatefulWidget {

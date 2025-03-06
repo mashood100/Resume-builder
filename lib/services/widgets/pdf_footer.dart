@@ -1,7 +1,7 @@
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 
-import '../../models/resume.dart';
+import '../../data/models/resume.dart';
 import 'pdf_base_widget.dart';
 
 /// Widget for the footer

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 
-import '../models/contact.dart';
-import '../models/education.dart';
-import '../models/experience.dart';
-import '../models/generic.dart';
-import '../models/resume.dart';
+import '../data/models/contact.dart';
+import '../data/models/education.dart';
+import '../data/models/experience.dart';
+import '../data/models/generic.dart';
+import '../data/models/resume.dart';
 
 class SampleResume extends Resume {
   SampleResume()

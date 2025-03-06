@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'improve_ai_button.dart';
 
 /// A generic form text field.
 class GenericTextField extends StatefulWidget {
@@ -11,6 +12,8 @@ class GenericTextField extends StatefulWidget {
     this.enabled = true,
     this.multiLine = false,
     this.roundedStyling = true,
+    this.showImproveWithAI = false,
+    this.fieldContext = '',
   });
 
   /// The label for the text field.
@@ -25,6 +28,12 @@ class GenericTextField extends StatefulWidget {
   /// Whether the text field is multi-line.
   final bool multiLine;
 
+  /// Whether to show the "Improve with AI" button
+  final bool showImproveWithAI;
+
+  /// The context for the field (used for AI improvement)
+  final String fieldContext;
+
   /// The callback when the user submits the text field.
   final Function(String?)? onSubmitted;
 
@@ -38,32 +47,43 @@ class GenericTextField extends StatefulWidget {
 class _GenericTextFieldState extends State<GenericTextField> {
   @override
   Widget build(BuildContext context) {
-    return FormBuilderTextField(
-      name: UniqueKey().toString(),
-      minLines: widget.multiLine ? 2 : 1,
-      maxLines: widget.multiLine || widget.multiLine ? 15 : 1,
-      controller: widget.controller,
-      enabled: widget.enabled,
-      style: !widget.roundedStyling
-          ? const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            )
-          : const TextStyle(fontSize: 14),
-      decoration: widget.roundedStyling
-          ? InputDecoration(
-              label: Text(widget.label),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            )
-          : InputDecoration(
-              label: Text(widget.label),
-              border: const UnderlineInputBorder(),
-              contentPadding: EdgeInsets.zero,
-            ),
-      onSubmitted: widget.onSubmitted,
-      onSaved: widget.onSubmitted,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        FormBuilderTextField(
+          name: UniqueKey().toString(),
+          minLines: widget.multiLine ? 2 : 1,
+          maxLines: widget.multiLine || widget.multiLine ? 15 : 1,
+          controller: widget.controller,
+          enabled: widget.enabled,
+          style: !widget.roundedStyling
+              ? const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                )
+              : const TextStyle(fontSize: 14),
+          decoration: widget.roundedStyling
+              ? InputDecoration(
+                  label: Text(widget.label),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                )
+              : InputDecoration(
+                  label: Text(widget.label),
+                  border: const UnderlineInputBorder(),
+                  contentPadding: EdgeInsets.zero,
+                ),
+          onSubmitted: widget.onSubmitted,
+          onSaved: widget.onSubmitted,
+        ),
+        if (widget.showImproveWithAI && widget.enabled)
+          ImproveWithAIButton(
+            controller: widget.controller,
+            fieldContext: widget.fieldContext.isEmpty ? widget.label.toLowerCase() : widget.fieldContext,
+            onImproved: () => widget.onSubmitted?.call(widget.controller.text),
+          ),
+      ],
     );
   }
 }

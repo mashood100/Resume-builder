@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
 import 'package:flutter_reorderable_grid_view/widgets/widgets.dart';
 
-import '../../../../common/strings.dart';
-import '../../../../models/resume.dart';
-import '../../../../core/share-widgets/frosted_container.dart';
+import '../../../../../common/strings.dart';
+import '../../../../../data/models/resume.dart';
+import '../../../../../core/share-widgets/frosted_container.dart';
 import '../section_title.dart';
 
 /// A widget that displays the skills section with a reorderable grid.

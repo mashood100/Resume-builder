@@ -2,8 +2,8 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 
 import '../../common/strings.dart';
-import '../../models/experience.dart';
-import '../../models/resume.dart';
+import '../../data/models/experience.dart';
+import '../../data/models/resume.dart';
 import 'pdf_base_widget.dart';
 import 'pdf_section_label.dart';
 

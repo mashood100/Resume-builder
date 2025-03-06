@@ -4,19 +4,19 @@ import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 
-import '../common/sample_resume.dart';
-import '../common/strings.dart';
-import '../models/resume.dart';
-import '../services/file_handler.dart';
-import '../services/pdf_generator.dart';
-import '../services/project_info.dart';
-import '../services/redirect_handler.dart';
+import '../../common/sample_resume.dart';
+import '../../common/strings.dart';
+import '../data/models/resume.dart';
+import '../../services/file_handler.dart';
+import '../../services/pdf_generator.dart';
+import '../../services/project_info.dart';
+import '../../services/redirect_handler.dart';
+import '../../core/share-widgets/download_dialog.dart';
 import '../core/share-widgets/confirmation_dialog.dart';
-import '../core/share-widgets/download_dialog.dart';
-import 'input_form/widgets/portrait_drawer.dart';
+import '../presentation/screens/input_form/widgets/portrait_drawer.dart';
+import '../presentation/screens/pdf_viewer.dart';
 import 'input_form/input_form.dart';
-import 'pdf_viewer.dart';
-import '../services/theme_provider.dart';
+import '../../services/theme_provider.dart';
 
 /// Split view of the resume builder (input form and PDF viewer).
 class SplitScreen extends StatefulWidget {

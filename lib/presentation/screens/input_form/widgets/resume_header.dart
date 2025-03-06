@@ -1,9 +1,9 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
-import '../../../common/strings.dart';
-import '../../../models/resume.dart';
-import '../../../core/share-widgets/text_field/generic_text_field.dart';
+import '../../../../common/strings.dart';
+import '../../../../data/models/resume.dart';
+import '../../../../core/share-widgets/text_field/generic_text_field.dart';
 import 'image_file_picker.dart';
 
 /// The header section of the resume form containing name, location, and logo picker.

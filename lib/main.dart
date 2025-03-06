@@ -4,12 +4,32 @@ import 'package:provider/provider.dart';
 import 'common/strings.dart';
 import 'core/styles/theme/dark_green_theme.dart';
 import 'core/styles/theme/light_green_theme.dart';
-import 'screens/split_screen.dart';
+import 'presentation/screens/split_screen.dart';
 import 'services/theme_provider.dart';
+import 'data/repository/ai_text_service.dart';
+import 'presentation/providers/ai_improvement_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const FlutterResumeBuilder());
+
+  // Create the AI service
+  final aiTextService = AITextService(
+    baseUrl: 'https://your-ai-api-url.com',
+  );
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ThemeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AIImprovementProvider(aiTextService: aiTextService),
+        ),
+      ],
+      child: const FlutterResumeBuilder(),
+    ),
+  );
 }
 
 class FlutterResumeBuilder extends StatelessWidget {

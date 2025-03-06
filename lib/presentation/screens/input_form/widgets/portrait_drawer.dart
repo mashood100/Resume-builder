@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../common/strings.dart';
-import '../../../services/pdf_generator.dart';
-import '../../../services/project_info.dart';
+import '../../../../common/strings.dart';
+import '../../../../services/pdf_generator.dart';
+import '../../../../services/project_info.dart';
 
 /// A drawer that is displayed in portrait mode.
 class PortraitDrawer extends StatelessWidget {

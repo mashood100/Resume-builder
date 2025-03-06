@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../common/strings.dart';
-import '../../../models/resume.dart';
-import '../../../core/share-widgets/confirmation_dialog.dart';
-import '../../../core/share-widgets/text_field/generic_text_field.dart';
+import '../../../../common/strings.dart';
+import '../../../../data/models/resume.dart';
+import '../../../../core/share-widgets/confirmation_dialog.dart';
+import '../../../../core/share-widgets/text_field/generic_text_field.dart';
 
 /// A widget that displays a section title with optional editing, deletion,
 /// visibility toggling, and reordering buttons.

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../common/strings.dart';
-import '../../../models/resume.dart';
+import '../../../../common/strings.dart';
+import '../../../../data/models/resume.dart';
 import 'input_sections/custom_section.dart';
 import 'input_sections/education_section.dart';
 import 'input_sections/experience_section.dart';

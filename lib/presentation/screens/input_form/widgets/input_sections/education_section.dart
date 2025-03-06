@@ -1,15 +1,15 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-import '../../../../common/strings.dart';
-import '../../../../models/resume.dart';
-import 'experience_entry.dart';
+import '../../../../../common/strings.dart';
+import '../../../../../data/models/resume.dart';
+import 'education_entry.dart';
 import '../section_title.dart';
 
-/// A widget that displays the experience section as a reorderable list.
-class ExperienceSection extends StatelessWidget {
-  /// Creates a new experience section widget.
-  const ExperienceSection({
+/// A widget that displays the education section as a reorderable list.
+class EducationSection extends StatelessWidget {
+  /// Creates a new education section widget.
+  const EducationSection({
     required this.resume,
     required this.portrait,
     super.key,
@@ -27,29 +27,29 @@ class ExperienceSection extends StatelessWidget {
       children: <Widget>[
         // Section title with add button.
         SectionTitle(
-          title: Strings.experience,
+          title: Strings.education,
           resume: resume,
-          onAddPressed: resume.addExperience,
+          onAddPressed: resume.addEducation,
         ),
-        // Reorderable list for experience entries.
+        // Reorderable list for education entries.
         ReorderableList(
-          itemCount: resume.experiences.length,
-          physics: const NeverScrollableScrollPhysics(),
+          itemCount: resume.educationHistory.length,
           shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           proxyDecorator: _proxyDecorator,
           onReorder: (int oldIndex, int newIndex) {
-            resume.onReorderExperienceList(oldIndex, newIndex);
+            resume.onReorderEducationList(oldIndex, newIndex);
           },
           itemBuilder: (BuildContext context, int index) {
             return ReorderableDelayedDragStartListener(
-              key: Key('${Strings.experience}$index'),
+              key: Key('${Strings.education}$index'),
               index: index,
-              child: ExperienceEntry(
+              child: EducationEntry(
                 portrait: portrait,
-                experience: resume.experiences[index],
+                education: resume.educationHistory[index],
                 rebuild: resume.rebuild,
                 onRemove: () =>
-                    resume.onDeleteExperience(resume.experiences[index]),
+                    resume.onDeleteEducation(resume.educationHistory[index]),
               ),
             );
           },

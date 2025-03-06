@@ -3,7 +3,7 @@ import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
 import 'package:flutter_reorderable_grid_view/widgets/widgets.dart';
 
-import '../../../../models/resume.dart';
+import '../../../../../data/models/resume.dart';
 import 'contact_entry.dart';
 
 /// A widget that displays the contact information section as a reorderable grid.

@@ -1,8 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-import '../../../../models/generic.dart';
-import '../../../../models/resume.dart';
+import '../../../../../data/models/generic.dart';
+import '../../../../../data/models/resume.dart';
 import 'custom_entry.dart';
 import '../section_title.dart';
 
