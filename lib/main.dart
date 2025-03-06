@@ -14,7 +14,7 @@ void main() {
 
   // Create the AI service
   final aiTextService = AITextService(
-    baseUrl: 'https://your-ai-api-url.com',
+    baseUrl: 'https://api.openai.com/v1',
   );
 
   runApp(

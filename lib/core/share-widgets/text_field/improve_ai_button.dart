@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../presentation/providers/ai_improvement_provider.dart';
+import '../../../data/enums/resume_field_type.dart';
 
 /// A button that improves text using AI when pressed
 class ImproveWithAIButton extends StatelessWidget {
   /// The text controller to read from and write to
   final TextEditingController controller;
 
-  /// The field context (e.g., 'job description', 'skill', etc.)
+  /// The field type (for AI context-specific improvements)
+  final ResumeFieldType fieldType;
+  
+  /// Fallback field context (legacy support)
   final String fieldContext;
 
   /// Optional callback to execute after text is improved
@@ -17,7 +21,8 @@ class ImproveWithAIButton extends StatelessWidget {
   const ImproveWithAIButton({
     Key? key,
     required this.controller,
-    required this.fieldContext,
+    this.fieldType = ResumeFieldType.general,
+    this.fieldContext = '',
     this.onImproved,
   }) : super(key: key);
 
@@ -36,10 +41,20 @@ class ImproveWithAIButton extends StatelessWidget {
                       final String currentText = controller.text;
                       if (currentText.trim().isEmpty) return;
 
-                      final improvedText = await aiProvider.improveText(
-                        currentText,
-                        context: fieldContext,
-                      );
+                      String improvedText;
+                      // Use the new enum-based method if no fieldContext is provided
+                      if (fieldContext.isEmpty) {
+                        improvedText = await aiProvider.improveText(
+                          currentText, 
+                          fieldType: fieldType,
+                        );
+                      } else {
+                        // Legacy support for existing implementations
+                        improvedText = await aiProvider.improveTextWithContext(
+                          currentText,
+                          context: fieldContext,
+                        );
+                      }
 
                       controller.text = improvedText.toString();
                       onImproved?.call();
@@ -66,7 +81,7 @@ class ImproveWithAIButton extends StatelessWidget {
                         .withOpacity(0.3),
                   ),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
             ),

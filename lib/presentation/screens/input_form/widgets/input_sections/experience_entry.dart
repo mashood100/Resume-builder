@@ -6,6 +6,7 @@ import 'date_range_entry.dart';
 import 'edit_entry_menu.dart';
 import '../../../../../core/share-widgets/frosted_container.dart';
 import '../../../../../core/share-widgets/text_field/generic_text_field.dart';
+import '../../../../../data/enums/resume_field_type.dart';
 
 /// A form field for an experience entry.
 class ExperienceEntry extends StatefulWidget {
@@ -118,7 +119,7 @@ class ExperienceEntryState extends State<ExperienceEntry> {
                 onSubmitted: (_) => widget.rebuild,
                 enabled: widget.experience.visible,
                 showImproveWithAI: true,
-                fieldContext: 'job description',
+                fieldType: ResumeFieldType.jobDescription,
               ),
             ],
           ),

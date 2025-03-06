@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'improve_ai_button.dart';
+import '../../../data/enums/resume_field_type.dart';
 
 /// A generic form text field.
 class GenericTextField extends StatefulWidget {
@@ -14,6 +15,7 @@ class GenericTextField extends StatefulWidget {
     this.roundedStyling = true,
     this.showImproveWithAI = false,
     this.fieldContext = '',
+    this.fieldType = ResumeFieldType.general,
   });
 
   /// The label for the text field.
@@ -31,8 +33,11 @@ class GenericTextField extends StatefulWidget {
   /// Whether to show the "Improve with AI" button
   final bool showImproveWithAI;
 
-  /// The context for the field (used for AI improvement)
+  /// The context for the field (legacy support)
   final String fieldContext;
+  
+  /// The specific resume field type (for better AI context)
+  final ResumeFieldType fieldType;
 
   /// The callback when the user submits the text field.
   final Function(String?)? onSubmitted;
@@ -80,6 +85,7 @@ class _GenericTextFieldState extends State<GenericTextField> {
         if (widget.showImproveWithAI && widget.enabled)
           ImproveWithAIButton(
             controller: widget.controller,
+            fieldType: widget.fieldType,
             fieldContext: widget.fieldContext.isEmpty ? widget.label.toLowerCase() : widget.fieldContext,
             onImproved: () => widget.onSubmitted?.call(widget.controller.text),
           ),
