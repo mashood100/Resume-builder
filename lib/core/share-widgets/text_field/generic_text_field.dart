@@ -10,6 +10,8 @@ class GenericTextField extends StatefulWidget {
     required this.label,
     required this.controller,
     required this.onSubmitted,
+    this.keyboardType,
+    this.validator,
     this.enabled = true,
     this.multiLine = false,
     this.roundedStyling = true,
@@ -44,6 +46,12 @@ class GenericTextField extends StatefulWidget {
 
   /// Whether the text field is enabled.
   final bool enabled;
+  
+  /// The keyboard type for the text field.
+  final TextInputType? keyboardType;
+  
+  /// The validator for the text field.
+  final String? Function(String?)? validator;
 
   @override
   State<GenericTextField> createState() => _GenericTextFieldState();
@@ -61,6 +69,8 @@ class _GenericTextFieldState extends State<GenericTextField> {
           maxLines: widget.multiLine || widget.multiLine ? 15 : 1,
           controller: widget.controller,
           enabled: widget.enabled,
+          keyboardType: widget.keyboardType,
+          validator: widget.validator,
           style: !widget.roundedStyling
               ? const TextStyle(
                   fontSize: 20,

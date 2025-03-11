@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../common/sample_resume.dart';
 import '../../common/strings.dart';
@@ -425,6 +426,13 @@ class SplitScreenState extends State<SplitScreen>
                 actions: [
                   if (orientation == Orientation.landscape)
                     _themeToggleButton(),
+                  IconButton(
+                    icon: const Icon(Icons.account_circle),
+                    tooltip: 'Account',
+                    onPressed: () {
+                      context.push('/account');
+                    },
+                  ),
                 ],
                 centerTitle: false,
               ),

@@ -1,21 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A resume builder app powered by flutter.">
@@ -32,11 +18,33 @@
   <title>flutter_resume_builder</title>
   <link rel="manifest" href="manifest.json">
 
+  <!-- Firebase JS SDK -->
+  <!-- Use the version(s) you need; here we use the Firebase v9 modular SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <!-- Include additional Firebase products if required (e.g., auth, firestore) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
+
+  <!-- Initialize Firebase -->
+  <script>
+    // Replace the placeholders with your project's actual configuration.
+    const firebaseConfig = {
+      apiKey: "AIzaSyBwP4zqrF8UzzV46kf6BOdaVzg50a2_NeY",
+      authDomain: "resume-builder-4230d.firebaseapp.com",
+      projectId: "resume-builder-4230d",
+      storageBucket: "resume-builder-4230d.firebasestorage.app",
+      messagingSenderId: "454199426978",
+      appId: "1:454199426978:web:03a9d13803b3faca0bbcfb",
+      measurementId: "G-DKJZFK718R"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+  </script>
+
   <script>
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;
   </script>
-  <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
 </head>
 <body>
@@ -56,7 +64,7 @@
   </script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.4.456/pdf.min.js"></script>
   <script type="text/javascript">
-     pdfjsLib.GlobalWorkerOptions.workerSrc = "//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.4.456/pdf.worker.min.js";
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.4.456/pdf.worker.min.js";
   </script>
 </body>
 </html>
