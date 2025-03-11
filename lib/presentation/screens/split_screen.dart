@@ -18,6 +18,7 @@ import 'input_form/widgets/portrait_drawer.dart';
 import 'input_form/input_form.dart';
 import 'pdf_viewer.dart';
 import '../../services/theme_provider.dart';
+import 'build_with_AI/build_with_ai.dart';
 
 /// Split view of the resume builder (input form and PDF viewer).
 class SplitScreen extends StatefulWidget {
@@ -130,7 +131,10 @@ class SplitScreenState extends State<SplitScreen>
                 onLayout: (PdfPageFormat format) =>
                     pdfGenerator.generateResumeAsPDF());
           case 4:
-            
+            showDialog(
+              context: context,
+              builder: (BuildContext context) => const BuildOptionsDialog(),
+            );
           case 5:
             RedirectHandler.openUrl(Strings.sourceCodeUrl);
           case 6:
@@ -170,6 +174,15 @@ class SplitScreenState extends State<SplitScreen>
           ),
           label: Text(
             firstWordOnly(Strings.printPDF),
+          ),
+        ),
+        NavigationRailDestination(
+          icon: const Tooltip(
+            message: 'Build with AI',
+            child: Icon(Icons.auto_awesome),
+          ),
+          label: Text(
+            'BUILD',
           ),
         ),
       ],
@@ -286,6 +299,18 @@ class SplitScreenState extends State<SplitScreen>
           await Printing.layoutPdf(
               onLayout: (PdfPageFormat format) =>
                   pdfGenerator.generateResumeAsPDF());
+        },
+      ),
+      _listOption(
+        context: context,
+        title: 'Build with AI',
+        iconData: Icons.auto_awesome,
+        onTap: () {
+          Navigator.pop(context);
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => const BuildOptionsDialog(),
+          );
         },
       ),
     ];
@@ -416,6 +441,18 @@ class SplitScreenState extends State<SplitScreen>
                                 );
                               },
                             ),
+                          );
+                        },
+                      ),
+                    if (orientation == Orientation.portrait)
+                      IconButton(
+                        icon: const Icon(Icons.auto_awesome),
+                        tooltip: 'Build with AI',
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                const BuildOptionsDialog(),
                           );
                         },
                       ),

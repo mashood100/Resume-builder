@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_resume_builder/core/routes/go_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'common/strings.dart';
 import 'core/styles/theme/dark_green_theme.dart';
 import 'core/styles/theme/light_green_theme.dart';
-import 'presentation/screens/split_screen.dart';
 import 'services/theme_provider.dart';
 import 'data/repository/ai_text_service.dart';
 import 'presentation/providers/ai_improvement_provider.dart';
 import 'presentation/providers/auth_provider.dart';
-import 'presentation/screens/auth/login_screen.dart';
-import 'presentation/screens/auth/signup_screen.dart';
-import 'presentation/screens/auth/forgot_password_screen.dart';
-import 'presentation/screens/auth/account_screen.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,60 +62,9 @@ class FlutterResumeBuilder extends StatelessWidget {
           darkTheme: greenDarkModeThemeData(),
           theme: greenLightModeThemeData(),
           themeMode: themeProvider.themeMode,
-          routerConfig: _router,
+          routerConfig: router,
         );
       },
     );
   }
 }
-
-// GoRouter configuration
-final GoRouter _router = GoRouter(
-  initialLocation: '/login',
-  routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const SplitScreen(),
-      redirect: (context, state) {
-        final authProvider =
-            Provider.of<AppAuthProvider>(context, listen: false);
-        if (!authProvider.isAuthenticated) {
-          return '/login';
-        }
-        return null;
-      },
-    ),
-    GoRoute(
-      path: '/login',
-      builder: (context, state) => const LoginScreen(),
-      redirect: (context, state) {
-        final authProvider =
-            Provider.of<AppAuthProvider>(context, listen: false);
-        if (authProvider.isAuthenticated) {
-          return '/';
-        }
-        return null;
-      },
-    ),
-    GoRoute(
-      path: '/signup',
-      builder: (context, state) => const SignupScreen(),
-    ),
-    GoRoute(
-      path: '/forgot-password',
-      builder: (context, state) => const ForgotPasswordScreen(),
-    ),
-    GoRoute(
-      path: '/account',
-      builder: (context, state) => const AccountScreen(),
-      redirect: (context, state) {
-        final authProvider =
-            Provider.of<AppAuthProvider>(context, listen: false);
-        if (!authProvider.isAuthenticated) {
-          return '/login';
-        }
-        return null;
-      },
-    ),
-  ],
-);
