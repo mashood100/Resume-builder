@@ -1,8 +1,6 @@
 import 'package:flutter_resume_builder/presentation/providers/auth_provider.dart';
 import 'package:flutter_resume_builder/presentation/screens/auth/account_screen.dart';
 import 'package:flutter_resume_builder/presentation/screens/auth/forgot_password_screen.dart';
-import 'package:flutter_resume_builder/presentation/screens/auth/login_screen.dart';
-import 'package:flutter_resume_builder/presentation/screens/auth/signup_screen.dart';
 import 'package:flutter_resume_builder/presentation/screens/split_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +22,7 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/login',
-      builder: (context, state) => const LoginScreen(),
+      builder: (context, state) => const SplitScreen(),
       redirect: (context, state) {
         final authProvider =
             Provider.of<AppAuthProvider>(context, listen: false);
@@ -36,7 +34,7 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/signup',
-      builder: (context, state) => const SignupScreen(),
+      builder: (context, state) => const SplitScreen(),
     ),
     GoRoute(
       path: '/forgot-password',

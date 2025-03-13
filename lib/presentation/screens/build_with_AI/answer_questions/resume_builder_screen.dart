@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/share-widgets/frosted_container.dart';
 import '../../../providers/resume_builder_provider.dart';
 import 'widgets/progress_indicator.dart';
 import 'widgets/basic_info_step.dart';
@@ -14,10 +13,7 @@ class ResumeBuilderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ResumeBuilderProvider(),
-      child: const _ResumeBuilderContent(),
-    );
+    return const _ResumeBuilderContent();
   }
 }
 
@@ -27,7 +23,7 @@ class _ResumeBuilderContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ResumeBuilderProvider>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Build Your Resume'),
@@ -52,7 +48,7 @@ class _ResumeBuilderContent extends StatelessWidget {
               totalSteps: provider.totalSteps,
             ),
           ),
-          
+
           // Current step content
           Expanded(
             child: SingleChildScrollView(
@@ -62,7 +58,7 @@ class _ResumeBuilderContent extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Navigation buttons
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -80,14 +76,15 @@ class _ResumeBuilderContent extends StatelessWidget {
                   )
                 else
                   const SizedBox(width: 80),
-                
                 ElevatedButton(
                   onPressed: () => provider.nextStep(),
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
                     backgroundColor: Theme.of(context).colorScheme.primary,
                   ),
-                  child: Text(provider.currentStep < provider.totalSteps - 1 ? 'Next' : 'Generate Resume'),
+                  child: Text(provider.currentStep < provider.totalSteps - 1
+                      ? 'Next'
+                      : 'Generate Resume'),
                 ),
               ],
             ),
@@ -96,7 +93,7 @@ class _ResumeBuilderContent extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildCurrentStep(BuildContext context, int step) {
     switch (step) {
       case 0:
@@ -113,4 +110,4 @@ class _ResumeBuilderContent extends StatelessWidget {
         return const SizedBox.shrink();
     }
   }
-} 
+}

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_resume_builder/data/repository/promts.dart';
 import 'package:http/http.dart' as http;
 import '../enums/resume_field_type.dart';
 
@@ -118,6 +119,129 @@ class AITextService {
     } catch (e) {
       print('Exception during chat: $e');
       return '';
+    }
+  }
+
+  Future<Map?> generateResume(String userData) async {
+    try {
+      final userPrompt =
+          '''You are an expert AI in resume writing and Applicant Tracking Systems (ATS). Your task is to take the following JSON resume data and enhance it while maintaining the exact same JSON structure.
+
+Guidelines:
+
+Improve descriptions to be more impactful and natural, avoiding clichés and robotic language.
+Correct any spelling or grammatical mistakes.
+Ensure the resume is ATS-friendly and optimized for readability.
+Maintain the original data structure and keys—do not modify or rearrange them.
+If any fields are missing, intelligently fill them based on the given information.
+Expand and refine work experience details to make them more compelling and results-driven.
+Return Data in this json structure and return only json nothing else: {
+  "resume": {
+    "creationDate": "string",
+    "lastModified": "string",
+    "name": "string",
+    "location": "string",
+    "contact": [
+      {
+        "value": "string",
+        "iconData": "integer"
+      }
+    ],
+    "experience": [
+      {
+        "company": "string",
+        "position": "string",
+        "startDate": "string",
+        "endDate": "string",
+        "location": "string",
+        "description": "string"
+      }
+    ],
+    "education": [
+      {
+        "institution": "string",
+        "degree": "string",
+        "startDate": "string",
+        "endDate": "string",
+        "location": "string"
+      }
+    ],
+    "skills": [
+      "string"
+    ],
+    "customSections": [
+      {
+        "SectionName": [
+          {
+            "title": "string",
+            "subtitle": "string",
+            "startDate": "string",
+            "endDate": "string",
+            "location": "string",
+            "description": "string"
+          }
+        ]
+      }
+    ],
+    "sectionOrder": [
+      "string"
+    ],
+    "hiddenSections": [
+      "string"
+    ],
+    "logoAsBytes": null,
+    "themeColor": null
+  },
+  "projectVersionInfo": {
+    "appName": "string",
+    "siteUrl": "string",
+    "version": "string",
+    "buildNumber": "string"
+  }
+}
+ Here is the user data: $userData
+
+''';
+
+      // userdatePrompt(userData);
+      var temp = {
+        'model': 'gpt-3.5-turbo',
+        'messages': [
+          {"role": "system", "content": generateResumeSystemPrompt},
+          {"role": "user", "content": userPrompt},
+        ],
+        'temperature': 0.7,
+        'max_tokens': 500,
+      };
+
+      final response = await http.post(
+        Uri.parse('https://api.openai.com/v1/chat/completions'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $api',
+        },
+        body: jsonEncode(temp),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final content = data['choices'][0]['message']['content'];
+
+        // Parse the response as JSON
+        try {
+          final resumeData = jsonDecode(content.toString());
+          return resumeData as Map;
+        } catch (e) {
+          print('Error parsing resume JSON: $e');
+          return null;
+        }
+      } else {
+        print('Error generating resume: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Exception when generating resume: $e');
+      return null;
     }
   }
 }

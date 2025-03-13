@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/share-widgets/frosted_container.dart';
 import '../../../../../core/share-widgets/text_field/generic_text_field.dart';
 import '../../../../providers/resume_builder_provider.dart';
+import 'dart:convert';
+import '../../../../../core/styles/style/outline_button_theme.dart';
 
 class EducationStep extends StatefulWidget {
   const EducationStep({Key? key}) : super(key: key);
@@ -15,7 +19,7 @@ class _EducationStepState extends State<EducationStep> {
   final TextEditingController _degreeController = TextEditingController();
   final TextEditingController _projectController = TextEditingController();
   final TextEditingController _projectDescController = TextEditingController();
-  
+
   @override
   void dispose() {
     _degreeController.dispose();
@@ -23,12 +27,12 @@ class _EducationStepState extends State<EducationStep> {
     _projectDescController.dispose();
     super.dispose();
   }
-  
+
   void _addEducation(ResumeBuilderProvider provider) {
     final degree = _degreeController.text.trim();
     final project = _projectController.text.trim();
     final projectDesc = _projectDescController.text.trim();
-    
+
     if (degree.isNotEmpty) {
       provider.addEducation(
         degree,
@@ -40,11 +44,135 @@ class _EducationStepState extends State<EducationStep> {
       _projectDescController.clear();
     }
   }
-  
+
+  void _showResumeJsonDialog(BuildContext context, String jsonData) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Your Resume Data'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: SingleChildScrollView(
+            child: SelectableText(jsonData),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGenerateResumeSection(
+      BuildContext context, ResumeBuilderProvider provider) {
+    return FrostedContainer(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            const Text(
+              "Ready to generate your resume?",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              "Our AI will create a professional resume based on your information",
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            if (provider.isGeneratingResume)
+              const Center(
+                child: Column(
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 12),
+                    Text("Generating your resume with AI..."),
+                  ],
+                ),
+              )
+            else ...[
+              if (provider.generationError != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    provider.generationError!,
+                    style: const TextStyle(color: Colors.red),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ElevatedButton.icon(
+                onPressed: () async {
+                  // Generate resume with AI
+                  final resumeData = await provider.generateResumeWithAI();
+                  if (resumeData != null && context.mounted) {
+                    // Show a dialog with options
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Resume Generated!'),
+                        content: const Text(
+                            'Your resume has been generated with AI. Would you like to preview it or import it into the app?'),
+                        actions: [
+                          OutlinedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              _showResumeJsonDialog(
+                                  context, jsonEncode(resumeData));
+                            },
+                            style: OutlinedButtonTheme.of(context).style,
+                            child: const Text('Preview JSON'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              Navigator.of(context).pop();
+                              // await provider.importResumeData(resumeData);
+
+                              if (context.mounted) {
+                                // Show success message
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text('Resume imported successfully!'),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+
+                                // Optional: Navigate back to home screen
+                                Navigator.of(context)
+                                    .popUntil((route) => route.isFirst);
+                              }
+                            },
+                            child: const Text('Import to App'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
+                icon: const Icon(Icons.auto_awesome),
+                label: const Text('Generate My Resume with AI'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  minimumSize: const Size(double.infinity, 50),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ResumeBuilderProvider>(context);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -61,7 +189,7 @@ class _EducationStepState extends State<EducationStep> {
           style: TextStyle(fontSize: 16),
         ),
         const SizedBox(height: 24),
-        
+
         // Add new education form
         FrostedContainer(
           child: Padding(
@@ -76,14 +204,12 @@ class _EducationStepState extends State<EducationStep> {
                   hintText: 'e.g., Bachelor of Science in Computer Science',
                 ),
                 const SizedBox(height: 16),
-                
                 GenericTextField(
                   label: 'Project Name (Optional)',
                   controller: _projectController,
                   onSubmitted: (_) {},
                 ),
                 const SizedBox(height: 16),
-                
                 GenericTextField(
                   label: 'Project Description (Optional)',
                   controller: _projectDescController,
@@ -91,7 +217,6 @@ class _EducationStepState extends State<EducationStep> {
                   multiLine: true,
                   maxLines: 3,
                 ),
-                
                 const SizedBox(height: 16),
                 ElevatedButton.icon(
                   onPressed: () => _addEducation(provider),
@@ -105,9 +230,9 @@ class _EducationStepState extends State<EducationStep> {
             ),
           ),
         ),
-        
+
         const SizedBox(height: 24),
-        
+
         // List of added education entries
         if (provider.educations.isNotEmpty) ...[
           const Text(
@@ -118,7 +243,6 @@ class _EducationStepState extends State<EducationStep> {
             ),
           ),
           const SizedBox(height: 12),
-          
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -170,63 +294,13 @@ class _EducationStepState extends State<EducationStep> {
             },
           ),
         ],
-        
+
         const SizedBox(height: 24),
-        
-        // Generate Resume button
+
+        // Replace the existing Generate Resume button section with this call
         if (provider.currentStep == provider.totalSteps - 1)
-          FrostedContainer(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  const Text(
-                    "Ready to generate your resume?",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      // Generate and show JSON data
-                      final jsonData = provider.generateResumeJson();
-                      _showResumeJsonDialog(context, jsonData);
-                    },
-                    icon: const Icon(Icons.description),
-                    label: const Text('Generate My Resume'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      minimumSize: const Size(double.infinity, 50),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          _buildGenerateResumeSection(context, provider),
       ],
     );
   }
-  
-  void _showResumeJsonDialog(BuildContext context, String jsonData) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Your Resume Data'),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: SingleChildScrollView(
-            child: SelectableText(jsonData),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
-    );
-  }
-} 
+}

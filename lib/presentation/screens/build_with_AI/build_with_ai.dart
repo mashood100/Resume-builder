@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_resume_builder/data/repository/ai_text_service.dart';
 import 'package:flutter_resume_builder/presentation/screens/build_with_AI/widgets/option_widget.dart';
 import 'package:flutter_resume_builder/presentation/screens/build_with_AI/answer_questions/resume_builder_screen.dart';
+import 'package:flutter_resume_builder/presentation/providers/resume_builder_provider.dart';
 
 class BuildOptionsDialog extends StatelessWidget {
   const BuildOptionsDialog({super.key});
@@ -60,10 +63,17 @@ class BuildOptionsDialog extends StatelessWidget {
                   'Create a resume through guided questions and AI will do the magic for you',
               onTap: () {
                 Navigator.of(context).pop();
+                // Create AITextService instance and pass it to the ResumeBuilderScreen
+                final aiService =
+                    AITextService(baseUrl: 'https://api.openai.com');
                 // Navigate to the ResumeBuilderScreen
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const ResumeBuilderScreen(),
+                    builder: (context) => ChangeNotifierProvider(
+                      create: (_) =>
+                          ResumeBuilderProvider(aiService: aiService),
+                      child: const ResumeBuilderScreen(),
+                    ),
                   ),
                 );
               },
