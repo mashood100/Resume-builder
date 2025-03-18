@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_resume_builder/data/repository/promts.dart';
 import 'package:http/http.dart' as http;
 import '../enums/resume_field_type.dart';
@@ -230,6 +231,7 @@ Return Data in this json structure and return only json nothing else: {
         // Parse the response as JSON
         try {
           final resumeData = jsonDecode(content.toString());
+          log("AI Resume Data $content");
           return resumeData as Map;
         } catch (e) {
           print('Error parsing resume JSON: $e');

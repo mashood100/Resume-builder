@@ -150,18 +150,18 @@ class ResumeBuilderProvider extends ChangeNotifier {
       notifyListeners();
 
       // Create the data structure to send to the AI service
-      final Map<String, dynamic> userData = {
-        'basicInfo': {
-          'name': name,
-          'location': location,
-          'email': email,
-          'phone': phone,
-          'introduction': introduction,
-        },
-        'skills': skills.map((skill) => skill.toJson()).toList(),
-        'experiences': experiences.map((exp) => exp.toJson()).toList(),
-        'education': educations.map((edu) => edu.toJson()).toList(),
-      };
+      // final Map<String, dynamic> userData = {
+      //   'basicInfo': {
+      //     'name': name,
+      //     'location': location,
+      //     'email': email,
+      //     'phone': phone,
+      //     'introduction': introduction,
+      //   },
+      //   'skills': skills.map((skill) => skill.toJson()).toList(),
+      //   'experiences': experiences.map((exp) => exp.toJson()).toList(),
+      //   'education': educations.map((edu) => edu.toJson()).toList(),
+      // };
    
       // Call the AI service to generate a formatted resume
       final resumeData = await _aiService.generateResume(generateResumeJson());
